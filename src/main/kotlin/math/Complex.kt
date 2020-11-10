@@ -1,5 +1,6 @@
 package math
 
+import kotlin.math.abs
 import kotlin.math.absoluteValue
 import kotlin.math.atan
 import kotlin.math.sqrt
@@ -72,8 +73,7 @@ class Complex(private var x: Double, private var y: Double) {
         val v = x * c.y + y * c.x
         this.x = u; this.y = v
     }
-    /** Оператор возведения ком
-     * плексных чисел в целую степень
+    /** Оператор возведения комплексных чисел в целую степень
      * @param p степень, в которую необходимо возвести число*/
     infix fun powAssign(p: Int) {
         if (p == 0){
@@ -104,5 +104,9 @@ class Complex(private var x: Double, private var y: Double) {
         return r
     }
 
+    override fun toString(): String {
+        return x.toString() + if (y < 0) " - i" else " + i" + abs(y).toString()
+    }
 
+    private infix fun eq(c: Complex) = abs(this.x - c.x)
 }

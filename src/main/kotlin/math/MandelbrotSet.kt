@@ -5,11 +5,14 @@ import kotlin.math.max
 
 class MandelbrotSet {
 
+    /**
+     * r^2
+     * */
     private var r2: Double = 4.0
 
     //Количество итераций, в течение которых проверяется
     //принадлежность точки множеству
-    var maxIters = 200
+    private var maxIterates = 200
         set(value) {
             //Проверяем устанавливаемое значение на корректность
             field = max(200, abs(value))
@@ -19,15 +22,14 @@ class MandelbrotSet {
      * Метод определения принадлежности точки множеству Мандельброта
      * @param c точка комплексной плоскости
      * @return true, если точка принадлежит множеству (при заданном значении maxIter)
-     * false - в противном случае
-     */
-    fun isInSet(c: Complex): Boolean {
+     * false - в противном случае */
+    fun isInSet(c: Complex): Float {
         val z = Complex()
-        for (i in 1..maxIters) {
+        for (i in 1..maxIterates) {
             z powAssign 2
             z += c
-            if (z.mod2() > r2) return false
+            if (z.mod2() > r2) return i.toFloat()/maxIterates.toFloat()
         }
-        return true
+        return 1F
     }
 }

@@ -9,7 +9,9 @@ import java.awt.Graphics
 
 class MandelbrotPainter(private val plane: ConvertData) : Painter {
 
-        var fractalTest : ((Complex)->Boolean)? = null
+        var fractalTest : ((Complex)->Float)? = null
+
+        var getColor: ((Float) -> Color) ?= null
 
         /**
          * Рисование фрактала
@@ -25,13 +27,14 @@ class MandelbrotPainter(private val plane: ConvertData) : Painter {
                             Converter.yScr2Crt(j, plane)
                         )
                     ) ?: return
-                    g.color = if (r) Color.BLACK else Color.WHITE
+                    if (getColor != null)
+                        g.color = getColor!!.invoke(r)
                     g.fillRect(i, j, 1, 1)
                 }
             }
         }
 
     override fun update(Width: Int, Height: Int) {
-
+        plane.width = Width; plane.height = Height
     }
 }

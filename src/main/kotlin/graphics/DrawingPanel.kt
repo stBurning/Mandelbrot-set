@@ -25,6 +25,6 @@ class DrawingPanel : JPanel() {
     }
 
     fun updatePainters(){
-        painters.forEach { painter -> painter.update(width, height) }
+        painters.forEach { painter -> painter.update(this.width, this.height) }
     }
 }
