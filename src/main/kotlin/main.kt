@@ -1,4 +1,4 @@
-
+import graphics.Window
 
 fun main() {
     val window = Window()

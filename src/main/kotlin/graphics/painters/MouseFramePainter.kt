@@ -25,18 +25,27 @@ class MouseFramePainter(private var g: Graphics) {
             }
         }
 
+    init {
+        g.apply {
+            setXORMode(Color.WHITE)
+            drawRect(-2, -2, 1, 1)
+            setPaintMode()
+        }
+    }
+
     private fun paint() {
         if (isPressed && start != null && current != null) {
             start?.let { s ->
                 current?.let { c ->
-                    g.setXORMode(Color.WHITE)
-                    g.color = Color.BLACK
-                    g.drawRect(
-                        min(s.x, c.x), min(s.y, c.y),
-                        abs(s.x - c.x),
-                        abs(s.y - c.y)
-                    )
-                    g.setPaintMode()
+                    g.apply {
+                        setXORMode(Color.WHITE)
+                        color = Color.BLACK
+                        drawRect(
+                            min(s.x, c.x), min(s.y, c.y),
+                            abs(s.x - c.x),
+                            abs(s.y - c.y))
+                        setPaintMode()
+                    }
                 }
             }
         }

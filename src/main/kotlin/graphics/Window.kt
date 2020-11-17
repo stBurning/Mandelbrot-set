@@ -1,6 +1,6 @@
-import graphics.DrawingPanel
-import graphics.colorScheme
-import graphics.painters.MandelbrotPainter
+package graphics
+
+import graphics.painters.FractalPainter
 import graphics.painters.MouseFramePainter
 import math.MandelbrotSet
 import util.ConvertData
@@ -14,10 +14,10 @@ import java.awt.event.MouseEvent
 import java.lang.Double.max
 import java.lang.Double.min
 import javax.swing.JFrame
+import kotlin.math.abs
 
 class Window : JFrame() {
 
-    private val minSize = Dimension(300, 200)
     private val mainPanel: DrawingPanel
 
     init {
@@ -28,8 +28,9 @@ class Window : JFrame() {
         mainPanel.background = Color.WHITE
         add(mainPanel)
         pack()
+
         var plane = ConvertData(mainPanel.width, mainPanel.height, -2.0, 1.0, -1.0, 1.0)
-        var fp = MandelbrotPainter(plane)
+        var fp = FractalPainter(plane)
         val fractal = MandelbrotSet()
         fp.fractalTest = fractal::isInSet
         fp.getColor = ::colorScheme
@@ -59,35 +60,21 @@ class Window : JFrame() {
                     mfp.current = it.point
                     mfp.start?.let { s ->
                         mfp.current?.let { c ->
-                            val xMin = min(
-                                Converter.xScr2Crt(s.x, plane),
-                                Converter.xScr2Crt(c.x, plane)
-                            )
-                            val xMax = max(
-                                Converter.xScr2Crt(s.x, plane),
-                                Converter.xScr2Crt(c.x, plane)
-                            )
-                            val yMin = min(
-                                Converter.yScr2Crt(s.y, plane),
-                                Converter.yScr2Crt(c.y, plane)
-                            )
-                            val yMax = max(
-                                Converter.yScr2Crt(s.y, plane),
-                                Converter.yScr2Crt(c.y, plane)
-                            )
+                            if (abs(s.x - c.x) < 2 || abs(s.y - c.y) < 2) { return@mouseReleased }
+                            val xMin = min(Converter.xScr2Crt(s.x, plane), Converter.xScr2Crt(c.x, plane))
+                            val xMax = max(Converter.xScr2Crt(s.x, plane), Converter.xScr2Crt(c.x, plane))
+                            val yMin = min(Converter.yScr2Crt(s.y, plane), Converter.yScr2Crt(c.y, plane))
+                            val yMax = max(Converter.yScr2Crt(s.y, plane), Converter.yScr2Crt(c.y, plane))
                             plane = ConvertData(mainPanel.width, mainPanel.height, xMin, xMax, yMin, yMax)
                             mainPanel.removePainter(fp)
-                            fp = MandelbrotPainter(plane)
+                            fp = FractalPainter(plane)
                             fp.fractalTest = fractal::isInSet
                             fp.getColor = ::colorScheme
                             mainPanel.addPainter(fp)
                         }
                     }
                 }
-
             }
-
-
         })
         mainPanel.addMouseMotionListener(object : MouseAdapter() {
             override fun mouseDragged(e: MouseEvent?) {
