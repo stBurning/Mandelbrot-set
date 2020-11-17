@@ -17,9 +17,9 @@ class MouseFramePainter(private var g: Graphics) {
         }
     var isPressed = false
         set(value) {
+            current = null
             field = value
             if (value) {
-
                 current = null
                 start = null
             }
